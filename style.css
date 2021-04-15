@@ -1,10 +1,11 @@
 body {
-    text-align: center;
     margin: 0;
     padding: 0;
     overflow: hidden;
 }
-
+.container {
+    overflow: hidden;
+}
 .left-panel {
     position: absolute;
     border-radius: 50px;
@@ -23,12 +24,6 @@ body {
     background: blue;
 }
 
-.left-panel .right-panel {
-    
-    -webkit-transition: right 0.2s ease-out;
-    -moz-transition: right 0.2s ease-out;
-    transition: right 0.2s ease-out;
-}
 
 
 /* 
