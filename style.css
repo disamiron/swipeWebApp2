@@ -5,10 +5,14 @@ body {
     padding: 0;
     overflow: hidden;
     border: 1px solid black;
+
 }
 .container {
     width:100vw;
+    height:100vh;
     overflow: hidden;
+    background: gray;
+    vertical-align: top;
 }
 .left-panel {
     width:100vw;
