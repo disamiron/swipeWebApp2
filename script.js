@@ -3,16 +3,18 @@ document.addEventListener("touchmove", handleTouchMove, false);
 
 const leftBar = document.querySelector(".left-panel");
 const rightBar = document.querySelector(".right-panel");
+const container = document.querySelector(".container");
 // console.log(leftBar.offsetWidth);
 // console.log(document.documentElement.clientWidth);
 let clientWidth = document.documentElement.clientWidth+"px";
-let clientWidthPx = document.documentElement.clientWidth/2;
-console.log(clientWidthPx);
+let halfWidthPx = document.documentElement.clientWidth/2;
+console.log(halfWidthPx);
 // document.body.style.width=clientWidth;
 document.body.style.setProperty('width', clientWidth);
 document.body.style.setProperty('max-width', clientWidth);
 leftBar.style.width=clientWidth;
 rightBar.style.width=clientWidth;
+container.style.width=clientWidth;
 leftBar.style.zIndex=1;
 rightBar.style.zIndex=0;
 
@@ -36,10 +38,11 @@ function handleTouchMove(event){
     let yDiff = y2-y1;
     if (Math.abs(xDiff)>Math.abs(yDiff)){
         if (xDiff>0){
+
             var pos = 0; 
             var movF = setInterval(moveLeft, 10)
             function moveLeft() {                            
-                if (pos == clientWidthPx) {
+                if (pos == halfWidthPx) {
                     clearInterval(movF);
                     changeZIndex ();
                     leftBar.style.left = "0px";
@@ -56,7 +59,7 @@ function handleTouchMove(event){
                     rightBar.style.left = pos + "px";
                 }
             }
-            
+
         } else {
             changeZIndex ()
         }
