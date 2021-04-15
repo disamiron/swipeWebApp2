@@ -14,13 +14,32 @@ console.log(halfWidthPx);
 // document.body.style.setProperty('max-width', clientWidth);
 // leftBar.style.width=clientWidth;
 // rightBar.style.width=clientWidth;
-container.style.width=clientWidth;
+// container.style.width=clientWidth;
 leftBar.style.zIndex=1;
 rightBar.style.zIndex=0;
 
 let x1 = null;
 let y1 = null;
-
+var pos = 0; 
+var movF = setInterval(moveLeft, 10)
+function moveLeft() {                            
+    if (pos == 50) {
+        clearInterval(movF);
+        changeZIndex ();
+        leftBar.style.left = "0vw";
+        rightBar.style.left = "0vw";
+    } else if (leftBar.style.zIndex==1) {
+        pos+=1;
+        console.log(document.documentElement.clientWidth)
+        leftBar.style.left = pos + "vw";
+        rightBar.style.left = "-"+ pos + "vw";
+    } else {
+        pos+=1;
+        console.log(document.documentElement.clientWidth)
+        leftBar.style.left = "-"+ pos + "vw";
+        rightBar.style.left = pos + "vw";
+    }
+}
 function handleTouchStart(event){
     const firstTouch = event.touches[0];
     x1 = firstTouch.clientX;
