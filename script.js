@@ -10,10 +10,10 @@ let clientWidth = document.documentElement.clientWidth+"px";
 let halfWidthPx = document.documentElement.clientWidth/2;
 console.log(halfWidthPx);
 // document.body.style.width=clientWidth;
-document.body.style.setProperty('width', clientWidth);
-document.body.style.setProperty('max-width', clientWidth);
-leftBar.style.width=clientWidth;
-rightBar.style.width=clientWidth;
+// document.body.style.setProperty('width', clientWidth);
+// document.body.style.setProperty('max-width', clientWidth);
+// leftBar.style.width=clientWidth;
+// rightBar.style.width=clientWidth;
 container.style.width=clientWidth;
 leftBar.style.zIndex=1;
 rightBar.style.zIndex=0;
@@ -42,21 +42,21 @@ function handleTouchMove(event){
             var pos = 0; 
             var movF = setInterval(moveLeft, 10)
             function moveLeft() {                            
-                if (pos == halfWidthPx) {
+                if (pos == 50) {
                     clearInterval(movF);
                     changeZIndex ();
-                    leftBar.style.left = "0px";
-                    rightBar.style.left = "0px";
+                    leftBar.style.left = "0vw";
+                    rightBar.style.left = "0vw";
                 } else if (leftBar.style.zIndex==1) {
-                    pos+=10;
+                    pos+=1;
                     console.log(document.documentElement.clientWidth)
-                    leftBar.style.left = pos + "px";
-                    rightBar.style.left = "-"+ pos + "px";
+                    leftBar.style.left = pos + "vw";
+                    rightBar.style.left = "-"+ pos + "vw";
                 } else {
-                    pos+=10;
+                    pos+=1;
                     console.log(document.documentElement.clientWidth)
-                    leftBar.style.left = "-"+ pos + "px";
-                    rightBar.style.left = pos + "px";
+                    leftBar.style.left = "-"+ pos + "vw";
+                    rightBar.style.left = pos + "vw";
                 }
             }
 
