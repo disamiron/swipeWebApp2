@@ -20,26 +20,7 @@ rightBar.style.zIndex=0;
 
 let x1 = null;
 let y1 = null;
-var pos = 0; 
-var movF = setInterval(moveLeft, 10)
-function moveLeft() {                            
-    if (pos == 50) {
-        clearInterval(movF);
-        changeZIndex ();
-        leftBar.style.left = "0vw";
-        rightBar.style.left = "0vw";
-    } else if (leftBar.style.zIndex==1) {
-        pos+=1;
-        console.log(document.documentElement.clientWidth)
-        leftBar.style.left = pos + "vw";
-        rightBar.style.left = "-"+ pos + "vw";
-    } else {
-        pos+=1;
-        console.log(document.documentElement.clientWidth)
-        leftBar.style.left = "-"+ pos + "vw";
-        rightBar.style.left = pos + "vw";
-    }
-}
+
 function handleTouchStart(event){
     const firstTouch = event.touches[0];
     x1 = firstTouch.clientX;
@@ -64,18 +45,18 @@ function handleTouchMove(event){
                 if (pos == 50) {
                     clearInterval(movF);
                     changeZIndex ();
-                    leftBar.style.left = "0vw";
-                    rightBar.style.left = "0vw";
+                    leftBar.style.marginLeft = "0vw";
+                    rightBar.style.marginLeft = "0vw";
                 } else if (leftBar.style.zIndex==1) {
                     pos+=1;
                     console.log(document.documentElement.clientWidth)
-                    leftBar.style.left = pos + "vw";
-                    rightBar.style.left = "-"+ pos + "vw";
+                    leftBar.style.marginLeft = pos + "vw";
+                    rightBar.style.marginLeft = "-"+ pos + "vw";
                 } else {
                     pos+=1;
                     console.log(document.documentElement.clientWidth)
-                    leftBar.style.left = "-"+ pos + "vw";
-                    rightBar.style.left = pos + "vw";
+                    leftBar.style.marginLeft = "-"+ pos + "vw";
+                    rightBar.style.marginLeft = pos + "vw";
                 }
             }
 
