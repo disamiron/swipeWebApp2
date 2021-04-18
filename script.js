@@ -1,5 +1,4 @@
-
-rightPanel = document.querySelector(".storage-txt");
+storageArea = document.querySelector(".storage-txt");
 
 
 
@@ -7,36 +6,16 @@ var canvas = document.querySelector(".grid-container");
 let clientWidth = document.documentElement.clientWidth;
 let clientHeight = document.documentElement.clientHeight;
 canvas.style.height = clientHeight + "px";
-rightPanel.style.height = clientHeight -100 + "px";
-rightPanel.style.width = clientWidth - 30 + "px";
-console.log(clientWidth);
+storageArea.style.height = clientHeight - 200 + "px";
+storageArea.style.width = clientWidth - 30 + "px";
 
-let firstTouchX = 0;
-
-
-
-
-//Получение холста и его контекста
-// const canvas = document.querySelector("grid-container");
-console.log(canvas)
-// const ctx = canvas.getContext("2d");
-
-//Чувствительность — количество пикселей, после которого жест будет считаться свайпом
-const sensitivity = 100;
-
-//Получение поля, в котором будут выводиться сообщения
-const msgBox = document.getElementById("msg-box");
+canvas.addEventListener("touchstart", function (e) { TouchStart(e); }); //Начало касания
+canvas.addEventListener("touchmove", function (e) { TouchMove(e); }); //Движение пальцем по экрану
+canvas.addEventListener("touchend", function () { TouchEnd(); }); //Прекращение движения по экрану
 
 var touchStart = null; //Точка начала касания
 var touchPosition = null; //Текущая позиция
 let nowMargin = 0;
-//Перехватываем события
-canvas.addEventListener("touchstart", function (e) { TouchStart(e); }); //Начало касания
-canvas.addEventListener("touchmove", function (e) { TouchMove(e); }); //Движение пальцем по экрану
-//Пользователь отпустил экран
-canvas.addEventListener("touchend", function (e) { TouchEnd(e, "green"); });
-//Отмена касания
-canvas.addEventListener("touchcancel", function (e) { TouchEnd(e, "red"); });
 
 function TouchStart(e)
 {
@@ -44,31 +23,16 @@ function TouchStart(e)
     touchStart = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
     touchPosition = { x: touchStart.x, y: touchStart.y };
     nowMargin = canvas.style.marginLeft.split('px').join('');
-    // firstTouchX = touchStart.x;
-    // return firstTouchX;
-    // Draw(touchPosition.x, touchPosition.y, 6, "blue"); //Рисуем точку начала касания
 }
 
 function TouchMove(e)
 {
-    //Получаем новую позицию
     touchPosition = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
-    // Draw(touchPosition.x, touchPosition.y, 2); //Рисуем точку текущей позиции
-    console.log((touchPosition.x - touchStart.x + +nowMargin) + "px")
     canvas.style.marginLeft = (touchPosition.x - touchStart.x + +nowMargin) + "px";
-    console.log("nowMargin"+nowMargin)
-    // leftPanel.style.marginLeft = touchPosition.x + "px";
-    // leftPanel.style.marginTop = touchPosition.y + "px";
-    // rightPanel.style.marginLeft = (touchPosition.x+200) + "px";
-    // rightPanel.style.marginTop = touchPosition.y + "px";
 }
 
-function TouchEnd(e, color)
+function TouchEnd()
 {
-    // DrawLine(); //Рисуем линию между стартовой и конечной точками
-    // Draw(touchPosition.x, touchPosition.y, 6, color); //Рисуем конечную точку
-    CheckAction(); //Определяем, какой жест совершил пользователь
-    // //Очищаем позиции
     touchStart = null;
     touchPosition = null;
     if (+(canvas.style.marginLeft.split('px').join(''))<(-(clientWidth))/2) {
@@ -78,51 +42,51 @@ function TouchEnd(e, color)
     }
 }
 
-function CheckAction()
-{
-    var d = //Получаем расстояния от начальной до конечной точек по обеим осям
-    {
-   	 x: touchStart.x - touchPosition.x,
-   	 y: touchStart.y - touchPosition.y
-    };
+// function CheckAction()
+// {
+//     var d = //Получаем расстояния от начальной до конечной точек по обеим осям
+//     {
+//    	 x: touchStart.x - touchPosition.x,
+//    	 y: touchStart.y - touchPosition.y
+//     };
 
-    var msg = ""; //Сообщение
+//     var msg = ""; //Сообщение
 
-    // if(Math.abs(d.x) > Math.abs(d.y)) //Проверяем, движение по какой оси было длиннее
-    // {
-   	 if(Math.abs(d.x) > sensitivity) //Проверяем, было ли движение достаточно длинным
-   	 {
-   		 if(d.x > 0) //Если значение больше нуля, значит пользователь двигал пальцем справа налево
-   		 {
-   			 msg = "Swipe Left";
-                // gridArea.style.marginLeft = "-" + clientWidth + "px"
+//     // if(Math.abs(d.x) > Math.abs(d.y)) //Проверяем, движение по какой оси было длиннее
+//     // {
+//    	 if(Math.abs(d.x) > sensitivity) //Проверяем, было ли движение достаточно длинным
+//    	 {
+//    		 if(d.x > 0) //Если значение больше нуля, значит пользователь двигал пальцем справа налево
+//    		 {
+//    			 msg = "Swipe Left";
+//                 // gridArea.style.marginLeft = "-" + clientWidth + "px"
             
-   		 }
-   		 else //Иначе он двигал им слева направо
-   		 {
-   			 msg = "Swipe Right";
-                // gridArea.style.marginLeft = "0px"
-   		 }
-   	 }
-    // }
-    // else //Аналогичные проверки для вертикальной оси
-    // {
-   	//  if(Math.abs(d.y) > sensitivity)
-   	//  {
-   	// 	 if(d.y > 0) //Свайп вверх
-   	// 	 {
-   	// 		 msg = "Swipe up";
-   	// 	 }
-   	// 	 else //Свайп вниз
-   	// 	 {
-   	// 		 msg = "Swipe down";
-   	// 	 }
-   	//  }
-    // }
+//    		 }
+//    		 else //Иначе он двигал им слева направо
+//    		 {
+//    			 msg = "Swipe Right";
+//                 // gridArea.style.marginLeft = "0px"
+//    		 }
+//    	 }
+//     // }
+//     // else //Аналогичные проверки для вертикальной оси
+//     // {
+//    	//  if(Math.abs(d.y) > sensitivity)
+//    	//  {
+//    	// 	 if(d.y > 0) //Свайп вверх
+//    	// 	 {
+//    	// 		 msg = "Swipe up";
+//    	// 	 }
+//    	// 	 else //Свайп вниз
+//    	// 	 {
+//    	// 		 msg = "Swipe down";
+//    	// 	 }
+//    	//  }
+//     // }
 
-    msgBox.innerText = msg; //Выводим сообщение
+//     msgBox.innerText = msg; //Выводим сообщение
 
-}
+// }
 
 // function Draw(x, y, weight, color = "#000") //Функция рисования точки
 // {
@@ -170,7 +134,7 @@ var startBtn = document.getElementById("fly-btn");
 var storageText = document.querySelector(".storage-txt");
 var animBox = document.querySelector(".anim-text"+idTxt);
 var idTxt = 0;
-posEnd=80;
+posEnd=5;
 function addTask () {
     console.log(inputText.value)
     if(inputText.value) {
@@ -179,7 +143,9 @@ function addTask () {
     newDiv.className="anim-text"+idTxt;
     newDiv.style.position="absolute";
     newDiv.style.display= "inline-block";
-    newDiv.style.fontSize="30px"
+    newDiv.style.fontSize="30px";
+    newDiv.style.width = clientWidth - 30 + "px";
+    newDiv.style.wordWrap= "break-word";
     newDiv.innerText=inputText.value;
     storageText.appendChild(newDiv);
     inputText.value="";
