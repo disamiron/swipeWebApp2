@@ -1,92 +1,156 @@
-document.addEventListener("touchstart", handleTouchStart, false);
-document.addEventListener("touchmove", handleTouchMove, false);
+// var leftPanel = document.querySelector(".leftPanel");
+// var rightPanel = document.querySelector(".rightPanel");
 
-const leftBar = document.querySelector(".left-panel");
-const rightBar = document.querySelector(".right-panel");
-const container = document.querySelector(".container");
-// console.log(leftBar.offsetWidth);
-// console.log(document.documentElement.clientWidth);
-let clientWidth = document.documentElement.clientWidth+"px";
-let halfWidthPx = document.documentElement.clientWidth/2;
-console.log(halfWidthPx);
-// document.body.style.width=clientWidth;
-// document.body.style.setProperty('width', clientWidth);
-// document.body.style.setProperty('max-width', clientWidth);
-// leftBar.style.width=clientWidth;
-// rightBar.style.width=clientWidth;
-// container.style.width=clientWidth;
-leftBar.style.zIndex=1;
-rightBar.style.zIndex=0;
 
-let x1 = null;
-let y1 = null;
 
-function handleTouchStart(event){
-    const firstTouch = event.touches[0];
-    x1 = firstTouch.clientX;
-    y1 = firstTouch.clientY;
-    console.log(x1+" "+y1)
+var gridArea = document.querySelector(".grid-container");
+let clientWidth = document.documentElement.clientWidth;
+let clientHeight = document.documentElement.clientHeight;
+gridArea.style.height = clientHeight + "px";
+console.log(clientWidth);
+
+let firstTouchX = 0;
+
+
+
+
+//Получение холста и его контекста
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+//Чувствительность — количество пикселей, после которого жест будет считаться свайпом
+const sensitivity = 20;
+
+//Получение поля, в котором будут выводиться сообщения
+const msgBox = document.getElementById("msg-box");
+
+var touchStart = null; //Точка начала касания
+var touchPosition = null; //Текущая позиция
+
+//Перехватываем события
+canvas.addEventListener("touchstart", function (e) { TouchStart(e); }); //Начало касания
+canvas.addEventListener("touchmove", function (e) { TouchMove(e); }); //Движение пальцем по экрану
+//Пользователь отпустил экран
+canvas.addEventListener("touchend", function (e) { TouchEnd(e, "green"); });
+//Отмена касания
+canvas.addEventListener("touchcancel", function (e) { TouchEnd(e, "red"); });
+
+function TouchStart(e)
+{
+    //Получаем текущую позицию касания
+    touchStart = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+    touchPosition = { x: touchStart.x, y: touchStart.y };
+    // firstTouchX = touchStart.x;
+    // return firstTouchX;
+    Draw(touchPosition.x, touchPosition.y, 6, "blue"); //Рисуем точку начала касания
 }
 
-function handleTouchMove(event){
-    if(!x1||!y1) {
-        return false
-    } 
-    let x2 = event.touches[0].clientX;
-    let y2 = event.touches[0].clientY;
-    let xDiff = x2-x1;
-    let yDiff = y2-y1;
-    if (Math.abs(xDiff)>Math.abs(yDiff)){
-        if (xDiff>0){
+function TouchMove(e)
+{
+    //Получаем новую позицию
+    touchPosition = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+    Draw(touchPosition.x, touchPosition.y, 2); //Рисуем точку текущей позиции
+    console.log(gridArea.style.marginLeft);
+    gridArea.style.marginLeft = touchPosition.x - touchStart.x + "px";
+    // leftPanel.style.marginLeft = touchPosition.x + "px";
+    // leftPanel.style.marginTop = touchPosition.y + "px";
+    // rightPanel.style.marginLeft = (touchPosition.x+200) + "px";
+    // rightPanel.style.marginTop = touchPosition.y + "px";
+}
 
-            var pos = 0; 
-            var movF = setInterval(moveLeft, 10)
-            function moveLeft() {                            
-                if (pos == 50) {
-                    clearInterval(movF);
-                    changeZIndex ();
-                    leftBar.style.marginLeft = "0vw";
-                    rightBar.style.marginLeft = "0vw";
-                } else if (leftBar.style.zIndex==1) {
-                    pos+=1;
-                    console.log(document.documentElement.clientWidth)
-                    leftBar.style.marginLeft = pos + "vw";
-                    rightBar.style.marginLeft = "-"+ pos + "vw";
-                } else {
-                    pos+=1;
-                    console.log(document.documentElement.clientWidth)
-                    leftBar.style.marginLeft = "-"+ pos + "vw";
-                    rightBar.style.marginLeft = pos + "vw";
-                }
-            }
+function TouchEnd(e, color)
+{
+    DrawLine(); //Рисуем линию между стартовой и конечной точками
+    Draw(touchPosition.x, touchPosition.y, 6, color); //Рисуем конечную точку
+    CheckAction(); //Определяем, какой жест совершил пользователь
+    //Очищаем позиции
+    touchStart = null;
+    touchPosition = null;
+}
 
-        } else {
-            changeZIndex ()
-        }
+function CheckAction()
+{
+    var d = //Получаем расстояния от начальной до конечной точек по обеим осям
+    {
+   	 x: touchStart.x - touchPosition.x,
+   	 y: touchStart.y - touchPosition.y
+    };
+
+    var msg = ""; //Сообщение
+
+    if(Math.abs(d.x) > Math.abs(d.y)) //Проверяем, движение по какой оси было длиннее
+    {
+   	 if(Math.abs(d.x) > sensitivity) //Проверяем, было ли движение достаточно длинным
+   	 {
+   		 if(d.x > 0) //Если значение больше нуля, значит пользователь двигал пальцем справа налево
+   		 {
+   			 msg = "Swipe Left";
+                gridArea.style.marginLeft = "-" + clientWidth + "px"
+            
+   		 }
+   		 else //Иначе он двигал им слева направо
+   		 {
+   			 msg = "Swipe Right";
+                gridArea.style.marginLeft = "0px"
+   		 }
+   	 }
     }
-    x1 = null;
-    y1 = null;
-}
-
-
-function zIndexCheck (num) {
-    if (num == 0) {
-        return 1
-    } else {
-        return 0
+    else //Аналогичные проверки для вертикальной оси
+    {
+   	 if(Math.abs(d.y) > sensitivity)
+   	 {
+   		 if(d.y > 0) //Свайп вверх
+   		 {
+   			 msg = "Swipe up";
+   		 }
+   		 else //Свайп вниз
+   		 {
+   			 msg = "Swipe down";
+   		 }
+   	 }
     }
+
+    msgBox.innerText = msg; //Выводим сообщение
+
 }
 
-function changeZIndex () {
-    leftBar.style.zIndex = zIndexCheck(leftBar.style.zIndex);
-    rightBar.style.zIndex = zIndexCheck(rightBar.style.zIndex);
+function Draw(x, y, weight, color = "#000") //Функция рисования точки
+{
+    ctx.fillStyle = color;
+
+    let weightHalf = weight / 2;
+
+    ctx.fillRect(x - weightHalf, y - weightHalf, weight, weight);
+}
+
+function DrawLine() //Функция рисования линии
+{
+    ctx.strokeStyle = "#ccc";
+
+    ctx.beginPath();
+
+    ctx.moveTo(touchStart.x, touchStart.y);
+    ctx.lineTo(touchPosition.x, touchPosition.y);
+
+    ctx.stroke();
 }
 
 
-
-// function fromZeroToHero (num) {
-//     if (clientWidthPx>num) {
-//         num +=10;
-//         leftBar.style.left = num+"px";
-//     }
-// }
+function startTime() {
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    m = checkTime(m);
+    s = checkTime(s);
+    document.getElementById('real-time').innerHTML =
+    h + ":" + m + ":" + s;
+    var t = setTimeout(startTime, 500);
+  }
+  function checkTime(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
+startTime()
+  
+ 
