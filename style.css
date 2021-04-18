@@ -48,7 +48,6 @@ body, html
   .storage-txt {
     position: fixed;
     overflow-x: auto;
-    height: 700px;
     padding-left: 10px;
   }
   .text-push {
