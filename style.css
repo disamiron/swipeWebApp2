@@ -19,19 +19,20 @@ body, html {
     grid-template-areas:"leftPanel rightPanel";
     height:100vw;
 }
-@media screen and (min-device-width: 900px) {
-    .grid-container {display: none}
+.pc-case {
+    margin-top: 50px;
+    margin-left: 15px;
+    position:absolute;
+    display: none;
 }
 h1 {
     margin-left: 15px;
     position:absolute
 }
-.pc-case {
-    margin-top: 100px;
-    margin-left: 15px;
-    position:absolute
+@media screen and (min-device-width: 900px) {
+    .grid-container {display: none}
+    .pc-case {display: initial;}
 }
-
 
 .leftPanel {
     grid-area: leftPanel; 
