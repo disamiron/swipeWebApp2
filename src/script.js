@@ -6,7 +6,7 @@ var mainArea = document.querySelector(".grid-container");
 let clientWidth = document.documentElement.clientWidth;
 let clientHeight = document.documentElement.clientHeight;
 mainArea.style.height = clientHeight + "px";
-storageArea.style.height = clientHeight - 200 + "px";
+storageArea.style.height = clientHeight - 300 + "px";
 storageArea.style.width = clientWidth - 30 + "px";
 
 mainArea.addEventListener("touchstart", function (e) { TouchStart(e); }); //Начало касания
