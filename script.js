@@ -1,13 +1,15 @@
-// var leftPanel = document.querySelector(".leftPanel");
-// var rightPanel = document.querySelector(".rightPanel");
+
+rightPanel = document.querySelector(".storage-txt");
 
 
 
-var gridArea = document.querySelector(".grid-container");
+var canvas = document.querySelector(".grid-container");
 let clientWidth = document.documentElement.clientWidth;
 let clientHeight = document.documentElement.clientHeight;
-gridArea.style.height = clientHeight + "px";
-console.log(gridArea.style.marginLeft);
+canvas.style.height = clientHeight + "px";
+rightPanel.style.height = clientHeight -100 + "px";
+rightPanel.style.width = clientWidth - 30 + "px";
+console.log(clientWidth);
 
 let firstTouchX = 0;
 
@@ -15,11 +17,12 @@ let firstTouchX = 0;
 
 
 //Получение холста и его контекста
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+// const canvas = document.querySelector("grid-container");
+console.log(canvas)
+// const ctx = canvas.getContext("2d");
 
 //Чувствительность — количество пикселей, после которого жест будет считаться свайпом
-const sensitivity = 20;
+const sensitivity = 100;
 
 //Получение поля, в котором будут выводиться сообщения
 const msgBox = document.getElementById("msg-box");
@@ -40,20 +43,20 @@ function TouchStart(e)
     //Получаем текущую позицию касания
     touchStart = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
     touchPosition = { x: touchStart.x, y: touchStart.y };
-    console.log(touchStart.x)
-    nowMargin = gridArea.style.marginLeft.split('px').join('');
+    nowMargin = canvas.style.marginLeft.split('px').join('');
     // firstTouchX = touchStart.x;
     // return firstTouchX;
-    Draw(touchPosition.x, touchPosition.y, 6, "blue"); //Рисуем точку начала касания
+    // Draw(touchPosition.x, touchPosition.y, 6, "blue"); //Рисуем точку начала касания
 }
 
 function TouchMove(e)
 {
     //Получаем новую позицию
     touchPosition = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
-    Draw(touchPosition.x, touchPosition.y, 2); //Рисуем точку текущей позиции
+    // Draw(touchPosition.x, touchPosition.y, 2); //Рисуем точку текущей позиции
     console.log((touchPosition.x - touchStart.x + +nowMargin) + "px")
-    gridArea.style.marginLeft = (touchPosition.x - touchStart.x + +nowMargin) + "px";
+    canvas.style.marginLeft = (touchPosition.x - touchStart.x + +nowMargin) + "px";
+    console.log("nowMargin"+nowMargin)
     // leftPanel.style.marginLeft = touchPosition.x + "px";
     // leftPanel.style.marginTop = touchPosition.y + "px";
     // rightPanel.style.marginLeft = (touchPosition.x+200) + "px";
@@ -62,12 +65,17 @@ function TouchMove(e)
 
 function TouchEnd(e, color)
 {
-    DrawLine(); //Рисуем линию между стартовой и конечной точками
-    Draw(touchPosition.x, touchPosition.y, 6, color); //Рисуем конечную точку
+    // DrawLine(); //Рисуем линию между стартовой и конечной точками
+    // Draw(touchPosition.x, touchPosition.y, 6, color); //Рисуем конечную точку
     CheckAction(); //Определяем, какой жест совершил пользователь
     // //Очищаем позиции
     touchStart = null;
     touchPosition = null;
+    if (+(canvas.style.marginLeft.split('px').join(''))<(-(clientWidth))/2) {
+        canvas.style.marginLeft = "-" + clientWidth + "px"
+    } else {
+        canvas.style.marginLeft = "0px"
+    }
 }
 
 function CheckAction()
@@ -80,8 +88,8 @@ function CheckAction()
 
     var msg = ""; //Сообщение
 
-    if(Math.abs(d.x) > Math.abs(d.y)) //Проверяем, движение по какой оси было длиннее
-    {
+    // if(Math.abs(d.x) > Math.abs(d.y)) //Проверяем, движение по какой оси было длиннее
+    // {
    	 if(Math.abs(d.x) > sensitivity) //Проверяем, было ли движение достаточно длинным
    	 {
    		 if(d.x > 0) //Если значение больше нуля, значит пользователь двигал пальцем справа налево
@@ -96,46 +104,46 @@ function CheckAction()
                 // gridArea.style.marginLeft = "0px"
    		 }
    	 }
-    }
-    else //Аналогичные проверки для вертикальной оси
-    {
-   	 if(Math.abs(d.y) > sensitivity)
-   	 {
-   		 if(d.y > 0) //Свайп вверх
-   		 {
-   			 msg = "Swipe up";
-   		 }
-   		 else //Свайп вниз
-   		 {
-   			 msg = "Swipe down";
-   		 }
-   	 }
-    }
+    // }
+    // else //Аналогичные проверки для вертикальной оси
+    // {
+   	//  if(Math.abs(d.y) > sensitivity)
+   	//  {
+   	// 	 if(d.y > 0) //Свайп вверх
+   	// 	 {
+   	// 		 msg = "Swipe up";
+   	// 	 }
+   	// 	 else //Свайп вниз
+   	// 	 {
+   	// 		 msg = "Swipe down";
+   	// 	 }
+   	//  }
+    // }
 
     msgBox.innerText = msg; //Выводим сообщение
 
 }
 
-function Draw(x, y, weight, color = "#000") //Функция рисования точки
-{
-    ctx.fillStyle = color;
+// function Draw(x, y, weight, color = "#000") //Функция рисования точки
+// {
+//     ctx.fillStyle = color;
 
-    let weightHalf = weight / 2;
+//     let weightHalf = weight / 2;
 
-    ctx.fillRect(x - weightHalf, y - weightHalf, weight, weight);
-}
+//     ctx.fillRect(x - weightHalf, y - weightHalf, weight, weight);
+// }
 
-function DrawLine() //Функция рисования линии
-{
-    ctx.strokeStyle = "#ccc";
+// function DrawLine() //Функция рисования линии
+// {
+//     ctx.strokeStyle = "#ccc";
 
-    ctx.beginPath();
+//     ctx.beginPath();
 
-    ctx.moveTo(touchStart.x, touchStart.y);
-    ctx.lineTo(touchPosition.x, touchPosition.y);
+//     ctx.moveTo(touchStart.x, touchStart.y);
+//     ctx.lineTo(touchPosition.x, touchPosition.y);
 
-    ctx.stroke();
-}
+//     ctx.stroke();
+// }
 
 
 function startTime() {
@@ -155,4 +163,49 @@ function startTime() {
 }
 startTime()
   
- 
+
+
+var inputText = document.getElementById("fly-txt");
+var startBtn = document.getElementById("fly-btn");
+var storageText = document.querySelector(".storage-txt");
+var animBox = document.querySelector(".anim-text"+idTxt);
+var idTxt = 0;
+posEnd=80;
+function addTask () {
+    console.log(inputText.value)
+    if(inputText.value) {
+    //   var textItem = createNewElement(inputText.value);
+    var newDiv = document.createElement("div");
+    newDiv.className="anim-text"+idTxt;
+    newDiv.style.position="absolute";
+    newDiv.style.display= "inline-block";
+    newDiv.style.fontSize="30px"
+    newDiv.innerText=inputText.value;
+    storageText.appendChild(newDiv);
+    inputText.value="";
+    
+            var movD = setInterval(moveDown, 1);
+            var pos = 0;
+            function moveDown() {
+                var animBox = document.querySelector(".anim-text"+idTxt);
+                if (pos == posEnd) {
+                    
+                    console.log(animBox.style.marginTop);
+                    clearInterval(movD)
+                    idTxt++;
+                    console.log(animBox.style.clientHeight)
+                    posEnd+=+(animBox.clientHeight)+10;
+                    console.log(posEnd)
+                } else {
+                    pos+=1;
+                    animBox.style.marginTop=pos+"px";
+                    console.log(animBox.style.marginTop);
+                }
+            }
+
+        
+    }
+}
+
+startBtn.onclick=addTask;
+

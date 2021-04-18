@@ -43,8 +43,34 @@ body, html
     "leftPanel rightPanel";
     height:100vw;
   }
-  .leftPanel { grid-area: leftPanel; background-color: cadetblue; width: 100vw;}
+  .leftPanel { grid-area: leftPanel; background-color: cadetblue; width: 100vw; }
   .rightPanel { grid-area: rightPanel; background-color: brown; width: 100vw;}
+  .storage-txt {
+    position: fixed;
+    overflow-x: auto;
+    height: 700px;
+    padding-left: 10px;
+  }
+  .text-push {
+      margin-top: 0;
+  }
+  #fly-txt{
+      margin-left: 5px;
+      margin-top: 5px;
+      width: 60%;}
+
+
+#fly-btn {
+    color: #232323;
+    background: transparent;
+    border: 1px solid #232323;
+    position: relative;
+    font-size: 14px;
+    letter-spacing: .3em;
+    transition: .2s ease-in-out;
+    padding: 17px 34px 17px 39px;
+    font-family: 'Montserrat', sans-serif;
+}
 
 
 .wrapper
