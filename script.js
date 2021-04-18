@@ -7,7 +7,7 @@ var gridArea = document.querySelector(".grid-container");
 let clientWidth = document.documentElement.clientWidth;
 let clientHeight = document.documentElement.clientHeight;
 gridArea.style.height = clientHeight + "px";
-console.log(clientWidth);
+console.log(gridArea.style.marginLeft);
 
 let firstTouchX = 0;
 
@@ -26,7 +26,7 @@ const msgBox = document.getElementById("msg-box");
 
 var touchStart = null; //Точка начала касания
 var touchPosition = null; //Текущая позиция
-
+let nowMargin = 0;
 //Перехватываем события
 canvas.addEventListener("touchstart", function (e) { TouchStart(e); }); //Начало касания
 canvas.addEventListener("touchmove", function (e) { TouchMove(e); }); //Движение пальцем по экрану
@@ -40,6 +40,8 @@ function TouchStart(e)
     //Получаем текущую позицию касания
     touchStart = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
     touchPosition = { x: touchStart.x, y: touchStart.y };
+    console.log(touchStart.x)
+    nowMargin = gridArea.style.marginLeft.split('px').join('');
     // firstTouchX = touchStart.x;
     // return firstTouchX;
     Draw(touchPosition.x, touchPosition.y, 6, "blue"); //Рисуем точку начала касания
@@ -50,8 +52,8 @@ function TouchMove(e)
     //Получаем новую позицию
     touchPosition = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
     Draw(touchPosition.x, touchPosition.y, 2); //Рисуем точку текущей позиции
-    console.log(gridArea.style.marginLeft);
-    gridArea.style.marginLeft = touchPosition.x - touchStart.x + "px";
+    console.log((touchPosition.x - touchStart.x + +nowMargin) + "px")
+    gridArea.style.marginLeft = (touchPosition.x - touchStart.x + +nowMargin) + "px";
     // leftPanel.style.marginLeft = touchPosition.x + "px";
     // leftPanel.style.marginTop = touchPosition.y + "px";
     // rightPanel.style.marginLeft = (touchPosition.x+200) + "px";
@@ -63,7 +65,7 @@ function TouchEnd(e, color)
     DrawLine(); //Рисуем линию между стартовой и конечной точками
     Draw(touchPosition.x, touchPosition.y, 6, color); //Рисуем конечную точку
     CheckAction(); //Определяем, какой жест совершил пользователь
-    //Очищаем позиции
+    // //Очищаем позиции
     touchStart = null;
     touchPosition = null;
 }
@@ -85,13 +87,13 @@ function CheckAction()
    		 if(d.x > 0) //Если значение больше нуля, значит пользователь двигал пальцем справа налево
    		 {
    			 msg = "Swipe Left";
-                gridArea.style.marginLeft = "-" + clientWidth + "px"
+                // gridArea.style.marginLeft = "-" + clientWidth + "px"
             
    		 }
    		 else //Иначе он двигал им слева направо
    		 {
    			 msg = "Swipe Right";
-                gridArea.style.marginLeft = "0px"
+                // gridArea.style.marginLeft = "0px"
    		 }
    	 }
     }
