@@ -55,8 +55,9 @@ var posEnd=5;
 
 //Добавление + анимация текста
 function addText () {
-    startBtn.disabled="disabled";
+    
     if(inputText.value) {
+startBtn.disabled="disabled";
         //создание нового уникального div
         var newDiv = document.createElement("div");
         //css свойства
